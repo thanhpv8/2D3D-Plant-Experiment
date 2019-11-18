@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Question Introduction</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/stylesheets/questIntro.css"> 
+  </head>
+  <body>
+    <div class="se-pre-con"></div>
+    <header class="jumbotron">
+      <h1 class="headerquote">Agriculture Experiment</h1>
+    </header>
+    <span class="menu"><strong>Your ID: <%=id%></strong> </span>
+    <!--<span class="menu"><a href="/getId">Logout</a> </span>-->
+    <div class="intro">
+      <p class="headline">There are two types of question in the experiments:</p>
+ 
+      <table width="100%">
+        <tr>
+          <td >
+            <div class="question">
+              <p class="headline">Question type 1: Count number of leaves of the plant</p><br>
+              By looking at 3D model or 2D images, user has to count the number of leaves on the plant.<br>
+              With 3D model, user can use mouse to look around or zoom out/in the plant.<br>
+              With 2D images, user will be provided a bunch of images taken around the plant at different angle.<br>
+              The option for user to choose will be from a list of ranges.
+            </div>
+          </td>
+          <td>
+            <img src="https://s3.us-west-1.amazonaws.com/plantexperiments/Stuffs/2DwithoutRuller.jpg" width="75%">
+          </td>
+        </tr>
+        <tr>
+          <td >
+            <div class="question">
+              <p class="headline">Question type 2: Measure the height of the plant</p><br>
+              By looking at 3D model or 2D images, user has to estimate the height of the plant (from the ground to the highest point of the plant)<br>
+              There is a yard-stick beside the plant for you to refer <br>
+              With 3D model, user can use mouse to look around the plant or zoom out/in the plant (user might have to zoom in to see clearly information on the yard-stick) <br>
+              With 2D images, user will be provided a bunch of images taken around the plant at different angle.<br>
+              <strong><em>Height of the plant = h</em></strong><br>
+              The option for user to choose will be from a list of ranges.
+            </div>
+          </td>
+          <td>
+            <img src="https://s3.us-west-1.amazonaws.com/plantexperiments/Stuffs/plantHeight.png" width="75%">
+          </td>
+        </tr>
+      </table>
+    </div>
+     <form action="/question/<%=id%>" method="get">
+        <div class="form-group">
+          <button class="btn btn-lg btn-primary">NOW, LET'S START THE EXPERIMENT!</button>
+        </div>
+      </form>
+    <p class="footer">Graphic Lab</p>
+  </body>
+</html>

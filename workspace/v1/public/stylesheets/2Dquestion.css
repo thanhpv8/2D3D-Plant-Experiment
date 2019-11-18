@@ -1,0 +1,112 @@
+html{
+    position: relative;
+    min-height: 100%;
+    min-width: 100%;
+}
+.preloader{
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0; 
+    bottom: 0;
+    background: rgba(0,0,0,1);
+    z-index : 2;
+}
+#myProgress {
+    width: 100%;
+    background-color: #ddd;
+    position: fixed; /* or absolute */
+    top: 50%;
+    height: 30px
+}
+#myBar {
+    width: 10%;
+    height: 30px;
+    background-color: #4CAF50;
+    text-align: center;
+    line-height: 30px;
+    color: white;
+}
+.container{
+    width:100%;
+}
+.headerquote{
+    text-align:center;
+}
+.menu{
+    margin:5px;
+    font-size:1vw;
+}
+table{
+    height:70%;
+    width: 100%;
+}
+#seconds{
+    width:50px;
+}
+img{
+    width:100%;
+}
+.imageZoom{
+    width: 100%;
+    height: 550px;
+}
+.submit{
+    text-align: center;
+    margin:10;
+}
+.question{
+    width:20%;
+    border: 1px solid black;
+    background-color: #becde5;
+}
+.smallImage{
+    width:23%;
+}
+.selected{
+    border:solid 1px red; 
+}
+.imageCover{
+    background: #ccc;
+    height: auto;
+    display: inline-block;
+    width: 31%;
+    text-align: center;
+    font-size: small;
+    margin:1px;
+}
+.questContent{
+    margin:5px;
+    font-size:1vw;
+}
+.controlZoom{
+    text-align:center; 
+    margin-top:5px;
+}
+.CamPosition{
+    font-size: 1vw;
+}
+.footer {
+    padding: 1.5em;
+    color: white;
+    background-color: black;
+    clear: left;
+    text-align: center;
+    margin-top:20px;
+    font-size: 1vw;
+}
+/*.wrapper{*/
+/*    width: 500px; */
+/*    overflow-x:scroll;     */
+/*    white-space: nowrap;*/
+/*}*/
+.slide4h{
+    background: #ccc;
+    height: auto;
+    display: inline-block;
+    width: 48%;
+}
+.btn{
+    text-align: center;
+    font-size: 1vw;
+}

@@ -1,0 +1,201 @@
+<html class="loading">
+  <head>
+    <title>2D Images Practice</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/stylesheets/2Dimages.css">  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.panzoom/3.2.2/jquery.panzoom.js"></script>
+    <script src="/lib/2Dimages.js"></script>
+  </head>
+<body> 
+    <div class="preloader">
+        <div id="myProgress">
+          <div id="myBar">10%</div>
+        </div>
+    </div>
+    
+    <div class="se-pre-con"></div>
+    <div class="frame">
+        <header class="jumbotron">
+            <h1 class="headerquote">Agriculture Experiment</h1>
+        </header>
+        <span class="menu"><strong>Your ID: <%=id%> </strong></span>
+        <!--<span class="menu"><a href="/getId">Logout</a> </span>-->
+        <table>
+          <tr>
+            <td class="instruct" rowspan="2">
+                <div class="title"> 
+                    <strong><u>INSTRUCTION FOR 2D IMAGES VIEWING<br></u></strong>
+                </div>
+                 <div class="introduce">
+                    - Left click on a specific small image to see it clearly in the large frame beside.<br>
+                    - Use the button "Zoom In", "Zoom Out" or "Range Slider" to support your viewing.<br>
+                    - You can pan the image in the large frame<br><br>
+                    We capture image from the top and from the side of plants like demonstration below:<br>
+                    <img id="camera" src="https://s3.us-west-1.amazonaws.com/plantexperiments/Stuffs/cameraplant.png"><br>
+                    Images were taken every 40-degree angle:<br>
+                    <img id="angle" src="https://s3.us-west-1.amazonaws.com/plantexperiments/Stuffs/capturedegree.png">
+                </div>
+            </td>
+            <td class="smallImage">
+                <p class="CamPosition">Images from the top camera:</p></br>
+              <div>
+                <div class="imageCover">
+                    <img class="small" src="https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/BAA/topBAA1.JPG" style="width:100%;" 
+                    onmouseover='onHover("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/BAA/topBAA1.JPG");' onmouseout="offHover()"; 
+                    onClick='imageClick("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/BAA/topBAA1.JPG");'><br>
+                    0&deg
+                </div>
+                <div class="imageCover">
+                    <img class="small" src="https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/BAA/topBAA2.JPG" style="width:100%;" 
+                    onmouseover='onHover("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/BAA/topBAA2.JPG");' onmouseout="offHover();" 
+                    onClick='imageClick("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/BAA/topBAA2.JPG");'><br>
+                    40&deg
+                </div>
+                <div class="imageCover">
+                    <img class="small" src="https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/BAA/topBAA3.JPG" style="width:100%;" 
+                    onmouseover='onHover("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/BAA/topBAA3.JPG");' onmouseout="offHover();" 
+                    onClick='imageClick("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/BAA/topBAA3.JPG");'><br>
+                    80&deg
+                </div>
+                <div class="imageCover">
+                    <img class="small" src="https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/BAA/topBAA4.JPG" style="width:100%;" 
+                    onmouseover='onHover("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/BAA/topBAA4.JPG");' onmouseout="offHover();" 
+                    onClick='imageClick("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/BAA/topBAA4.JPG");'><br>
+                    120&deg
+                </div>
+                <div class="imageCover">
+                    <img class="small" src="https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/BAA/topBAA5.JPG" style="width:100%;" 
+                    onmouseover='onHover("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/BAA/topBAA5.JPG");' onmouseout="offHover();" 
+                    onClick='imageClick("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/BAA/topBAA5.JPG");'><br>
+                    160&deg
+                </div>  
+                <div class="imageCover">
+                    <img class="small" src="https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/BAA/topBAA6.JPG" style="width:100%;" 
+                    onmouseover='onHover("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/BAA/topBAA6.JPG");' onmouseout="offHover();" 
+                    onClick='imageClick("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/BAA/topBAA6.JPG");'><br>
+                    200&deg
+                </div>  
+                <div class="imageCover">
+                    <img class="small" src="https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/BAA/topBAA7.JPG" style="width:100%;" 
+                    onmouseover='onHover("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/BAA/topBAA7.JPG");' onmouseout="offHover();" 
+                    onClick='imageClick("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/BAA/topBAA7.JPG");'><br>
+                    240&deg
+                </div>  
+                <div class="imageCover">
+                    <img class="small" src="https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/BAA/topBAA8.JPG" style="width:100%;" 
+                    onmouseover='onHover("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/BAA/topBAA8.JPG");' onmouseout="offHover();" 
+                    onClick='imageClick("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/BAA/topBAA8.JPG");'><br>
+                    280&deg
+                </div>
+                <div class="imageCover">
+                    <img class="small" src="https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/BAA/topBAA9.JPG" style="width:100%;" 
+                    onmouseover='onHover("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/BAA/topBAA9.JPG");' onmouseout="offHover();" 
+                    onClick='imageClick("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/BAA/topBAA9.JPG");'><br>
+                    320&deg
+                </div>
+               </div> 
+            </td>
+            <td rowspan="2">
+                <div class="controlZoom"> 
+                    <button id="zoomIn" class="btn btn-primary">Zoom In</button>
+                    <button id="zoomOut" class="btn btn-primary">Zoom Out</button>
+                </div>
+                <input type="range" id="zoomRange">
+                
+                <div>
+                    <img id="zoom" src="https://s3.us-west-1.amazonaws.com/plantexperiments/Stuffs/crossed_lines.png">
+                </div>
+            </td>
+          </tr>
+          <tr>
+             <td class="smallImage">
+                 <p class="CamPosition">Images from the side camera:</p></br>
+                <div>
+                    <div class="imageCover">
+                        <img class="small" src="https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/BAA/botBAA1.JPG" style="width:100%;" 
+                        onmouseover='onHover("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/BAA/botBAA1.JPG");' onmouseout="offHover()"; 
+                        onClick='imageClick("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/BAA/botBAA1.JPG");'><br>
+                        0&deg
+                    </div>
+                    <div class="imageCover">
+                        <img class="small" src="https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/BAA/botBAA2.JPG" style="width:100%;" 
+                        onmouseover='onHover("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/BAA/botBAA2.JPG");' onmouseout="offHover();" 
+                        onClick='imageClick("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/BAA/botBAA2.JPG");'><br>
+                        40&deg
+                    </div>
+                    <div class="imageCover">
+                        <img class="small" src="https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/BAA/botBAA3.JPG" style="width:100%;" 
+                        onmouseover='onHover("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/BAA/botBAA3.JPG");' onmouseout="offHover();" 
+                        onClick='imageClick("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/BAA/botBAA3.JPG");'><br>
+                        80&deg
+                    </div>
+                    <div class="imageCover">
+                        <img class="small" src="https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/BAA/botBAA4.JPG" style="width:100%;" 
+                        onmouseover='onHover("/plants/2D/BAA/botBAA4.JPG");' onmouseout="offHover();" 
+                        onClick='imageClick("/plants/2D/BAA/botBAA4.JPG");'><br>
+                        120&deg
+                    </div>
+                    <div class="imageCover">
+                        <img class="small" src="https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/BAA/botBAA5.JPG" style="width:100%;" 
+                        onmouseover='onHover("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/BAA/botBAA5.JPG");' onmouseout="offHover();" 
+                        onClick='imageClick("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/BAA/botBAA5.JPG");'><br>
+                        160&deg
+                    </div>  
+                    <div class="imageCover">
+                        <img class="small" src="https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/BAA/botBAA6.JPG" style="width:100%;" 
+                        onmouseover='onHover("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/BAA/botBAA6.JPG");' onmouseout="offHover();" 
+                        onClick='imageClick("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/BAA/botBAA6.JPG");'><br>
+                        200&deg
+                    </div>  
+                    <div class="imageCover">
+                        <img class="small" src="https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/BAA/botBAA7.JPG" style="width:100%;" 
+                        onmouseover='onHover("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/BAA/botBAA7.JPG");' onmouseout="offHover();" 
+                        onClick='imageClick("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/BAA/botBAA7.JPG");'><br>
+                        240&deg
+                    </div>  
+                    <div class="imageCover">
+                        <img class="small" src="https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/BAA/botBAA8.JPG" style="width:100%;" 
+                        onmouseover='onHover("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/BAA/botBAA8.JPG");' onmouseout="offHover();" 
+                        onClick='imageClick("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/BAA/botBAA8.JPG");'><br>
+                        280&deg
+                    </div>
+                    <div class="imageCover">
+                        <img class="small" src="https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/BAA/botBAA9.JPG" style="width:100%;" 
+                        onmouseover='onHover("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/BAA/botBAA9.JPG");' onmouseout="offHover();" 
+                        onClick='imageClick("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/BAA/botBAA9.JPG");'><br>
+                        320&deg   
+                    </div>
+               </div>  
+             </td>
+          </tr>
+        </table>
+         
+        <form action="/questIntro/<%=id%>" method="get">
+            <div class="form-group" style="text-align:center;">
+              <button class="btn btn-lg btn-primary">Next</button>
+            </div>
+        </form>
+        <p class="footer">Graphic Labs</p>      
+    </div>
+    <script>
+        $('.small').click(function(){
+           $('.selected').removeClass('selected'); // removes the previous selected class
+           $(this).addClass('selected'); // adds the class to the clicked image
+        });
+    </script>
+    <script>
+        (function() {
+          $('#zoom').panzoom({
+            $zoomIn: $("#zoomIn"),
+            $zoomOut: $("#zoomOut"),
+            $zoomRange: $("#zoomRange"),
+            startTransform: 'scale(1.1)',
+            increment: 0.1,
+            minScale: 1,
+            contain: 'invert'
+          }).panzoom('zoom');
+        })();
+    </script>
+  </body>
+</html>

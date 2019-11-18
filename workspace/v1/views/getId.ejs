@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Authorization</title>
+    <link rel="stylesheet" href="/stylesheets/getId.css">  
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  </head>
+  <body>
+    <header class="jumbotron">
+      <h1 class="headerquote">Agriculture Experiment</h1>
+    </header>
+    <div class="userId">
+      <form action="/getId/register" method="post">
+        <strong>Participant ID:</strong></br>
+        <em>(Create your own user id. Id can include numbers or letters. Then Click Register button)</em><br>
+        <div class="idInput">
+          <input  type="text" name="userId" placeholder="abc123" required><br>
+          <button style="font-size:1vw;"class="btn btn-primary">Register</button>
+        </div>
+          <br><lable><%=message1%></lable>
+      </form>
+      <!--<form class="login" action="/getId/login" method="post">-->
+      <!--  <em>(If you already have user id, then log in using your id)</em>-->
+      <!--  <input  type="text" name="userId" placeholder="abc123" required>-->
+      <!--  <button class="btn  btn-primary">Log In</button>-->
+      <!--  <br><lable><%=message2%></lable>-->
+      <!--</form>-->
+    </div>
+    <p class="footer">Graphic Lab</p>
+  </body>
+</html>

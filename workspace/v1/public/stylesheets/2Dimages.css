@@ -1,0 +1,104 @@
+html{
+    position: relative;
+    min-height: 100%;
+    min-width: 100%;
+}
+
+.preloader{
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0; 
+    bottom: 0;
+    background: rgba(0,0,0,1);
+    z-index : 2;
+}
+#myProgress {
+    width: 100%;
+    background-color: #ddd;
+    position: fixed; /* or absolute */
+    top: 50%;
+    
+    height: 30px
+}
+#myBar {
+    width: 10%;
+    height: 30px;
+    background-color: #4CAF50;
+    text-align: center;
+    line-height: 30px;
+    color: white;
+}
+.frame{
+    margin:0px 15px 0px 15px;
+}
+table{
+    height:50%;
+}
+#camera,#angle {
+    width:100%;
+}
+.title{
+    margin: 50 10 0 0;
+    text-align: center;
+    background-color: #ffdfaf;
+    font-size: 1vw;
+}
+.CamPosition{
+    font-size: 1vw;
+}
+.introduce{
+    text-align: justify;
+    margin:0 10 0 0;
+    background-color: #ffdfaf;
+    font-size: 1vw;
+}
+.footer{
+    padding: 1em;
+    color: white;
+    background-color: black;
+    clear: left;
+    text-align: center;
+    width:100%;
+    bottom:0;
+    font-size: 1vw;
+}
+
+.imageCover{
+    background: #ccc;
+    height: auto;
+    display: inline-block;
+    width: 32%;
+    text-align: center;
+    font-size: small
+}
+.selected{
+    border:solid 1px red; 
+}
+#zoom{
+    width:100%;
+}
+.controlZoom{
+    text-align:center; 
+    margin-top:5px;
+}
+.smallImage{
+    width:23%;
+}
+.instruct{
+    width:23%;
+}
+.menu{
+    margin:5px;
+    font-size: 1vw;
+}
+.headerquote{
+    text-align:center;
+}
+form{
+    margin: 30px;
+}
+.btn{
+    text-align: center;
+    font-size: 1vw;
+}

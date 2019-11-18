@@ -1,0 +1,60 @@
+html {
+	-webkit-transition: background-color 1s;
+	transition: background-color 1s;
+}
+html, body { min-height: 100%; }
+html.loading {
+	background: #333 url('/Stuffs/loader.gif') no-repeat 50% 50%;
+	-webkit-transition: background-color 0;
+	transition: background-color 0;
+}
+body {
+	-webkit-transition: opacity 1s ease-in;
+	transition: opacity 1s ease-in;
+}
+html.loading body {
+	opacity: 0;
+	-webkit-transition: opacity 0;
+	transition: opacity 0;
+}
+
+.footer{
+    padding: 1em;
+    color: white;
+    background-color: black;
+    clear: left;
+    text-align: center;
+    width:100%;
+    font-size: 1vw;
+}
+.menu{
+    margin:5px;
+    font-size: 1vw;
+}
+.intro{
+    width:90%; 
+    margin: 50px auto;
+    font-size:1vw;
+}
+.question{
+    text-align: justify;
+    margin-right: 10px;
+}
+.headline{
+    font-size: 2vw;
+    font-weight: bold;
+    text-decoration: underline;
+}
+img{
+    margin:10px;
+}
+.headerquote{
+    text-align:center;
+}
+.form-group{
+    text-align:center;
+}
+.btn{
+    text-align: center;
+    font-size: 1vw;
+}

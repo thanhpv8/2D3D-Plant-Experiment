@@ -1,0 +1,40 @@
+html{
+    position: relative;
+    min-height: 100%;
+}
+.footer {
+    position: absolute;
+    top:90%;
+    padding: 1em;
+    color: white;
+    background-color: black;
+    clear: left;
+    text-align: center;
+    width:100%;
+    bottom:0;
+    font-size: 1vw;
+}
+
+.headerquote{
+    text-align:center;
+}
+.userId{
+    position: absolute;
+    top:50%;
+    left:50%;
+    transform: translateX(-50%) translateY(-50%);
+    /*width:800px; */
+    /*height:400px;*/
+    font-size: 1vw;
+}
+.idInput{
+    margin-top:10px;
+    text-align: center;
+}
+.btn{
+    margin-top: 10px;
+}
+
+.login{
+    margin-top:30px;
+}

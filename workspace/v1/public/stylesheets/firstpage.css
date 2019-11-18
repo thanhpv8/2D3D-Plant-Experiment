@@ -1,0 +1,36 @@
+body{
+    background-color: #515954
+}
+
+div{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+table{
+    align-items: center;
+}
+.title{
+    text-align:center;
+}
+.name{
+    color:white;
+    text-transform: uppercase;
+    font-size:3vw; 
+    margin: 20px;
+}
+#beginlink{
+    margin:50px;
+}
+.image{
+    text-align:left;
+}
+img{
+    border-radius: 8px; 
+    height: auto;
+}
+.btn{
+    text-align: center;
+    font-size: 1.5vw;
+}

@@ -1,0 +1,57 @@
+<html class="loading">
+  <head>
+    <title>3D Model Practice</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/stylesheets/3Dmodel.css">  
+    <script src="/lib/threejs/build/three.min.js"></script> 
+    <script src="/lib/threejs/js/loaders/DDSLoader.js"></script>
+    <script src="/lib/threejs/js/loaders/MTLLoader.js"></script>
+    <script src="/lib/threejs/js/loaders/OBJLoader.js"></script>
+    <script src="/lib/threejs/js/Detector.js"></script>
+    <script src="/lib/threejs/js/libs/stats.min.js"></script>
+    <script src="/lib/threejs/js/controls/OrbitControls.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/lib/3Dmodel.js"></script>
+
+  </head>
+  <body onload="webglstart();" > 
+  <div class="preloader">
+    <div id="myProgress">
+      <div id="myBar">10%</div>
+    </div>
+  </div>
+    <div class="se-pre-con"></div>
+    <div class="container">
+        <header class="jumbotron">
+            <h1 class="headerquote">Agriculture Experiment</h1>
+        </header>
+        <span class="menu"><strong>Your ID: <%=id%> </strong></span>
+        <!--<span class="menu"><a href="/getId">Logout</a> </span>-->
+      <table>
+        <tr>
+          <td class="instruct">
+            <p>
+              <strong>
+                <u>INSTRUCTION FOR 3D MODEL VIEWING<br></u>
+              </strong>
+                You can use the mouse to control the 3D model<br>
+              <li>Press the left button of the mouse: To move around the plant</li>
+              <li>Press both the right and left button of the mouse: To move the whole plant model</li>
+              <li>Scroll the middle wheel of the mouse: To zoom in and out the plant</li>
+            </p>
+          </td>
+          <td class="modelshow">
+            <canvas id="canvas"></canvas>
+          </td>
+        </tr>
+      </table>
+        <form action="/2Dimages/<%=id%>" method="get">
+            <div class="form-group">
+              <button class="btn btn-lg btn-primary">Next</button>
+            </div>
+        </form>
+        <p class="footer">Graphic Labs</p>    
+         
+    </div>
+  </body>
+</html>

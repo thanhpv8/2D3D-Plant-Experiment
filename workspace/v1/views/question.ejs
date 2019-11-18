@@ -1,0 +1,670 @@
+<%if(type ==1){%>
+<% if(visualtype== 3) { %>
+<html class="loading">
+  <head>
+    <title>Experiment question</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/stylesheets/3Dquestion.css"> 
+    <script src="/lib/3Dquestion.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/lib/threejs/build/three.min.js"></script> 
+    <script src="/lib/threejs/js/loaders/DDSLoader.js"></script>
+    <script src="/lib/threejs/js/loaders/MTLLoader.js"></script>
+    <script src="/lib/threejs/js/loaders/OBJLoader.js"></script>
+    <script src="/lib/threejs/js/Detector.js"></script>
+    <script src="/lib/threejs/js/libs/stats.min.js"></script>
+    <script src="/lib/threejs/js/controls/OrbitControls.js"></script>
+    <script>
+      function onResize(element, callback) {
+      var height = element.clientHeight;
+      var width  = element.clientWidth;
+      
+        return setInterval(function() {
+            if (element.clientHeight != height || element.clientWidth != width) {
+              height = element.clientHeight;
+              width  = element.clientWidth;
+              callback();
+            }
+          }, 500);
+        }
+      
+      var onProgress = function ( xhr ) {
+        if ( xhr.lengthComputable ) {
+          var percentComplete = xhr.loaded / xhr.total * 100;
+          var roundedPercent=Math.round(percentComplete);
+          console.log( Math.round(roundedPercent, 2) + '% downloaded' );
+          var elem = document.getElementById("myBar"); 
+          elem.style.width = Math.round(roundedPercent,2) + '%'; 
+          elem.innerHTML = Math.round(roundedPercent,2)   + '%';
+          if(percentComplete==100){
+            $('.preloader').fadeOut(0);
+            var timer = setInterval(function () {
+              document.getElementById("seconds").value = pad(++sec);
+            }, 1000);
+          }
+          
+        }
+      };
+      
+      var onError = function ( xhr ) { };
+      
+        var canvas, renderer, scene;
+        var ambient, directionalLight;
+        var mtlLoader, objLoader;
+        var controls, stats, render, camera;
+      function init(){
+          canvas = document.getElementById('canvas');
+          renderer = new THREE.WebGLRenderer({canvas: canvas});
+          canvas.width  = canvas.clientWidth;
+          canvas.height = canvas.clientHeight;
+          renderer.setViewport(0, 0, canvas.clientWidth, canvas.clientHeight);
+      
+          scene = new THREE.Scene();
+      
+          ambient = new THREE.AmbientLight( 0x444444,5 );
+          scene.add( ambient );
+      
+          // directionalLight = new THREE.DirectionalLight( 0xffeedd );
+          // directionalLight.position.set( 0, 0, 1 ).normalize();
+          // scene.add( directionalLight );
+      
+          THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );
+          mtlLoader = new THREE.MTLLoader();
+          mtlLoader.crossOrigin = '';
+          mtlLoader.setPath( 'https://s3.us-west-1.amazonaws.com/plantexperiments/plants/3D/<%=folderName%>/' );
+          mtlLoader.load( '<%=mtlName%>', function( materials ) {
+            materials.preload();
+            objLoader = new THREE.OBJLoader();
+            objLoader.setMaterials( materials );
+            objLoader.setPath( 'https://s3.us-west-1.amazonaws.com/plantexperiments/plants/3D/<%=folderName%>/' );
+            objLoader.load( '<%=objName%>', function ( object ) {
+              object.position.y = 0;
+              scene.add( object );
+            }, onProgress, onError );
+          });
+      
+          camera = new THREE.PerspectiveCamera(45, canvas.clientWidth/canvas.clientHeight, 0.1, 1000);
+          camera.position.set(100,0,0);
+          camera.up = new THREE.Vector3(0,0,1);
+          camera.lookAt(new THREE.Vector3(0,0,0));
+      
+          controls = new THREE.OrbitControls( camera, renderer.domElement );
+          // controls.addEventListener( 'change', render ); // remove when using animation loop
+          controls.enableZoom = true;
+          
+          window.addEventListener( 'resize', onWindowResize, false );
+      }
+             
+      function onWindowResize() {
+        camera.aspect = window.innerWidth/ window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize( window.innerWidth, window.innerHeight );
+      }
+      
+      function render(){
+        requestAnimationFrame( render );   
+        renderer.render(scene, camera);
+      };
+      function webglstart(){
+        init();
+        render();
+      }
+    </script>
+  </head>
+<body onload="webglstart();" > 
+  <div class="preloader">
+    <div id="myProgress">
+      <div id="myBar">10%</div>
+    </div>
+  </div>
+    <div class="se-pre-con"></div>
+    <div class="container">
+        <header class="jumbotron">
+            <h1 class="headerquote">Agriculture Experiment</h1>
+        </header>
+        <span class="menu"><strong>Your ID: <%=id%> </strong></span>
+        <!--<span class="menu"><a href="/getId">Logout</a> </span>-->
+        
+    <table>
+      <tr>
+        <td class="question">
+          <div class="questContent">
+            <strong>Question number <%=order%>/16</strong><br><br>
+            <strong>By looking at the 3D model beside. Let's guess the height of the plant:</strong></br>
+            <form action="/question/<%=id%>/<%=order%>/<%=realorder%>" method="post">
+              <input type="radio" name="answer" required value="<%=option1 %>"> <%=option1 %> (inches)<br>
+              <input type="radio" name="answer" value="<%=option2 %>"> <%=option2 %> (inches)</input><br>
+              <input type="radio" name="answer" value="<%=option3 %>"> <%=option3 %> (inches)</input><br>
+              <input type="radio" name="answer" value="<%=option4 %>"> <%=option4 %> (inches)</input><br>
+              Elapsed time: <input type="text" id="seconds" name="duration" value="00"><br>
+              <div class="submit">
+                <button class="btn btn-lg btn-primary" onclick="stop()">Submit</button>
+              </div>
+              
+            </form>
+            <strong>Suggestion: You might have to zoom in to see clearly information on the yard-stick</strong>
+          </div>
+          
+          <!--<div style="text-align:center">-->
+          <!--  <button class="btn btn-lg btn-primary" id="pause">Pause</button>-->
+          <!--</div>-->
+          
+        </td>
+        <td class="modelshow">
+          <canvas id="canvas"></canvas>
+        </td>
+      </tr>
+    </table>
+    <p class="footer">Graphic Labs</p>    
+    </div>
+  </body>
+</html>
+<% } else if(visualtype ==2){ %>
+<html class="loading">
+  <head>
+    <title>Experiment question</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/stylesheets/2Dquestion.css">
+    <script src="/lib/2Dquestion.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.panzoom/3.2.2/jquery.panzoom.js"></script>
+
+  </head>
+<body> 
+  <div class="preloader">
+      <div id="myProgress">
+        <div id="myBar">10%</div>
+      </div>
+  </div>
+    <div class="se-pre-con"></div>
+    <div class="container">
+        <header class="jumbotron">
+            <h1 class="headerquote">Agriculture Experiment</h1>
+        </header>
+        <span class="menu"><strong>Your ID: <%=id%> </strong></span>
+        <!--<span class="menu"><a href="/getId">Logout</a> </span>-->
+        <table width="100%">
+          <tr >
+            <td class="question" rowspan="2">
+              <div class="questContent">
+                <strong>Question number <%=order%>/16</strong><br><br>
+                <strong>By looking at the 2D images beside. Let's guess the height of the plant:</strong></br>
+                <form action="/question/<%=id%>/<%=order%>/<%=realorder%>" method="post">
+                  <input type="radio" name="answer" required value="<%=option1 %>"> <%=option1 %> (inches) <br>
+                  <input type="radio" name="answer" value="<%=option2 %>"> <%=option2 %> (inches)</input><br>
+                  <input type="radio" name="answer" value="<%=option3 %>"> <%=option3 %> (inches)</input><br>
+                  <input type="radio" name="answer" value="<%=option4 %>"> <%=option4 %> (inches)</input><br>
+                  Elapsed time: <input type="text" id="seconds" name="duration" value="00"><br>
+                  <div class="submit">
+                    <button class="btn btn-lg btn-primary" onclick="stop()">Submit</button>
+                  </div>
+                </form>
+              </div>
+              
+                <!--<div style="text-align:center">-->
+                <!--  <button class="btn btn-lg btn-primary" id="pause">Pause</button>-->
+                <!--</div>-->
+            </td>
+            <td width="20%">
+                <p class="CamPosition"> Images from the top camera:</p></br>
+              <div id="slider4" class="text-center">
+                <div class="slide4h"><img class="small" src="https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2Dsmall/<%=folderName%>/top<%=imageName%>1.JPG" 
+                    onmouseover='onHover("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/<%=folderName%>/top<%=imageName%>1.JPG");' onmouseout="offHover();" 
+                    onClick='imageClick("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/<%=folderName%>/top<%=imageName%>1.JPG");'></div>
+                <div class="slide4h"><img class="small" src="https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2Dsmall/<%=folderName%>/top<%=imageName%>2.JPG" 
+                    onmouseover='onHover("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/<%=folderName%>/top<%=imageName%>2.JPG");' onmouseout="offHover();" 
+                    onClick='imageClick("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/<%=folderName%>/top<%=imageName%>2.JPG");'></div>
+              </div> 
+            </td>
+            <td class="imageZoom" rowspan="2">
+              <div class="controlZoom"> 
+                  <button id="zoomIn" class="btn btn-primary">Zoom In</button>
+                  <button id="zoomOut" class="btn btn-primary">Zoom Out</button>
+              </div>
+              <input type="range" id="zoomRange">
+              <div>
+                <image id="zoom" src="https://s3.us-west-1.amazonaws.com/plantexperiments/Stuffs/crossed_lines.png">
+              </div>
+              
+            </td>
+          </tr>
+          <tr>
+             <td width="20%">
+                 <p class="CamPosition"> Images from the side camera:</p></br>
+                <div id="slider4" class="text-center">
+                  <div class="slide4h"><img class="small" src="https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2Dsmall/<%=folderName%>/bot<%=imageName%>1.JPG" 
+                    onmouseover='onHover("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/<%=folderName%>/bot<%=imageName%>1.JPG");' onmouseout="offHover();" 
+                    onClick='imageClick("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/<%=folderName%>/bot<%=imageName%>1.JPG");'></div>
+                  <div class="slide4h"><img class="small" src="https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2Dsmall/<%=folderName%>/bot<%=imageName%>2.JPG" 
+                    onmouseover='onHover("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/<%=folderName%>/bot<%=imageName%>2.JPG");' onmouseout="offHover();" 
+                    onClick='imageClick("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/<%=folderName%>/bot<%=imageName%>2.JPG");'></div>
+                </div>  
+             </td>
+          </tr>
+        </table>
+        <p class="footer">Graphic Labs</p>      
+    </div>
+    <script>
+      $('.small').click(function(){
+         $('.selected').removeClass('selected'); // removes the previous selected class
+         $(this).addClass('selected'); // adds the class to the clicked image
+      });
+    </script>
+    <script>
+      var html = document.getElementsByTagName('html')[0];
+      $(window).bind("load", function() {
+         var elem = document.getElementById("myBar");
+         var width = 10;
+         var id=setInterval(function(){
+          if (width >= 100) {
+            clearInterval(id);
+          } else {
+            width++; 
+            elem.style.width = width + '%'; 
+            elem.innerHTML = width  + '%';
+            if(width==100){
+                $('.preloader').fadeOut(0);
+                var timer = setInterval(function () {
+                  document.getElementById("seconds").value = pad(++sec);
+                }, 1000);
+            }
+          }
+         }, 10);
+      });
+    </script>
+    <script>
+        (function() {
+          $('#zoom').panzoom({
+            $zoomIn: $("#zoomIn"),
+            $zoomOut: $("#zoomOut"),
+            $zoomRange: $("#zoomRange"),
+            startTransform: 'scale(0.9)',
+            increment: 0.1,
+            minScale: 1,
+            contain: 'invert'
+          }).panzoom('zoom');
+        })();
+    </script>
+  </body>
+</html>
+<% } %>
+<% } else if(type==2) { %>
+<% if(visualtype== 3) { %>
+<html class="loading">
+  <head>
+    <title>Experiment question</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/stylesheets/3Dquestion.css"> 
+    <script src="/lib/3Dquestion.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/lib/threejs/build/three.min.js"></script> 
+    <script src="/lib/threejs/js/loaders/DDSLoader.js"></script>
+    <script src="/lib/threejs/js/loaders/MTLLoader.js"></script>
+    <script src="/lib/threejs/js/loaders/OBJLoader.js"></script>
+    <script src="/lib/threejs/js/Detector.js"></script>
+    <script src="/lib/threejs/js/libs/stats.min.js"></script>
+    <script src="/lib/threejs/js/controls/OrbitControls.js"></script>
+    <script>
+      function onResize(element, callback) {
+      var height = element.clientHeight;
+      var width  = element.clientWidth;
+      
+        return setInterval(function() {
+            if (element.clientHeight != height || element.clientWidth != width) {
+              height = element.clientHeight;
+              width  = element.clientWidth;
+              callback();
+            }
+          }, 500);
+        }
+      
+      var onProgress = function ( xhr ) {
+        if ( xhr.lengthComputable ) {
+            var percentComplete = xhr.loaded / xhr.total * 100;
+            var roundedPercent=Math.round(percentComplete);
+            console.log( Math.round(roundedPercent, 2) + '% downloaded' );
+          	 var elem = document.getElementById("myBar"); 
+          	 elem.style.width = Math.round(roundedPercent,2) + '%'; 
+             elem.innerHTML = Math.round(roundedPercent,2)   + '%';
+             if(percentComplete==100){
+                $('.preloader').fadeOut(0);
+                var timer = setInterval(function () {
+                  document.getElementById("seconds").value = pad(++sec);
+                }, 1000);
+              }
+    	   }
+      };
+      
+      var onError = function ( xhr ) { };
+      
+        var canvas, renderer, scene;
+        var ambient, directionalLight;
+        var mtlLoader, objLoader;
+        var controls, stats, render, camera;
+      function init(){
+          canvas = document.getElementById('canvas');
+          renderer = new THREE.WebGLRenderer({canvas: canvas});
+          canvas.width  = canvas.clientWidth;
+          canvas.height = canvas.clientHeight;
+          renderer.setViewport(0, 0, canvas.clientWidth, canvas.clientHeight);
+      
+          scene = new THREE.Scene();
+      
+          ambient = new THREE.AmbientLight( 0x444444,5 );
+          scene.add( ambient );
+      
+          // directionalLight = new THREE.DirectionalLight( 0xffeedd );
+          // directionalLight.position.set( 0, 0, 1 ).normalize();
+          // scene.add( directionalLight );
+      
+          THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );
+          mtlLoader = new THREE.MTLLoader();
+          mtlLoader.crossOrigin = '';
+          mtlLoader.setPath( 'https://s3.us-west-1.amazonaws.com/plantexperiments/plants/3D/<%=folderName%>/' );
+          mtlLoader.load( '<%=mtlName%>', function( materials ) {
+            materials.preload();
+            objLoader = new THREE.OBJLoader();
+            objLoader.setMaterials( materials );
+            objLoader.setPath( 'https://s3.us-west-1.amazonaws.com/plantexperiments/plants/3D/<%=folderName%>/' );
+            objLoader.load( '<%=objName%>', function ( object ) {
+              object.position.y = 0;
+              scene.add( object );
+            }, onProgress, onError );
+          });
+      
+          camera = new THREE.PerspectiveCamera(45, canvas.clientWidth/canvas.clientHeight, 0.1, 1000);
+          camera.position.set(100,0,0);
+          camera.up = new THREE.Vector3(0,0,1);
+          camera.lookAt(new THREE.Vector3(0,0,0));
+      
+          controls = new THREE.OrbitControls( camera, renderer.domElement );
+          // controls.addEventListener( 'change', render ); // remove when using animation loop
+          controls.enableZoom = true;
+          
+          window.addEventListener( 'resize', onWindowResize, false );
+      }
+             
+      function onWindowResize() {
+        camera.aspect = window.innerWidth/ window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize( window.innerWidth, window.innerHeight );
+      }
+      
+      function render(){
+        requestAnimationFrame( render );   
+        renderer.render(scene, camera);
+      };
+      function webglstart(){
+        init();
+        render();
+      }
+    </script>
+  </head>
+<body onload="webglstart();" > 
+    <div class="preloader">
+      <div id="myProgress">
+        <div id="myBar">10%</div>
+      </div>
+    </div>
+    <div class="se-pre-con"></div>
+    <div class="container">
+        <header class="jumbotron">
+            <h1 class="headerquote">Agriculture Experiment</h1>
+        </header>
+        <span class="menu"><strong>Your ID: <%=id%> </strong></span>
+        <!--<span class="menu"><a href="/getId">Logout</a> </span>-->
+        
+    <table>
+      <tr>
+        <td class="question">
+          <div class="questContent">
+            <strong>Question number <%=order%>/16</strong><br><br>
+              <strong>By looking at the 3D model beside. Let's estimate the approximate number of leaves on the plant:</strong></br>
+              <form action="/question/<%=id%>/<%=order%>/<%=realorder%>" method="post">
+                <input type="radio" name="answer" required value="<%=option1 %>"> <%=option1 %> (leaves) <br>
+                <input type="radio" name="answer" value="<%=option2 %>"> <%=option2 %> (leaves)</input><br>
+                <input type="radio" name="answer" value="<%=option3 %>"> <%=option3 %> (leaves)</input><br>
+                <input type="radio" name="answer" value="<%=option4 %>"> <%=option4 %> (leaves)</input><br>
+                Elapsed time: <input type="text" id="seconds" name="duration" value="00">
+                <div class="submit">
+                  <button class="btn btn-lg btn-primary" onclick="stop()">Submit</button>
+                </div>
+              </form>
+          </div>
+          <!--<div style="text-align:center">-->
+          <!--  <button class="btn btn-lg btn-primary" id="pause">Pause</button>-->
+          <!--</div>-->
+        </td>
+        <td class="modelshow">
+          <canvas id="canvas"></canvas>
+        </td>
+      </tr>
+    </table>
+    <p class="footer">Graphic Labs</p>    
+    </div>
+  </body>
+</html>
+<% } else if(visualtype ==2){ %>
+<html class="loading">
+  <head>
+    <title>Experiment question</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/stylesheets/2Dquestion.css">  
+    <script src="/lib/2Dquestion.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.panzoom/3.2.2/jquery.panzoom.js"></script>
+  </head>
+<body> 
+  <div class="preloader">
+      <div id="myProgress">
+        <div id="myBar">10%</div>
+      </div>
+  </div>
+    <div class="se-pre-con"></div>
+    <div class="container">
+        <header class="jumbotron">
+            <h1 class="headerquote">Agriculture Experiment</h1>
+        </header>
+        <span class="menu"><strong>Your ID: <%=id%></strong> </span>
+        <!--<span class="menu"><a href="/getId">Logout</a> </span>-->
+        <table>
+          <tr>
+            <td class="question" rowspan="2">
+              <div class="questContent">
+                <strong>Question number <%=order%>/16</strong><br><br>
+                <strong>By looking at the 2D images beside. Let's estimate the approximate number of leaves on the plant:</strong></br>
+                <form action="/question/<%=id%>/<%=order%>/<%=realorder%>" method="post">
+                  <input type="radio" name="answer" required value="<%=option1 %>"> <%=option1 %> (leaves)<br>
+                  <input type="radio" name="answer" value="<%=option2 %>"> <%=option2 %> (leaves)</input><br>
+                  <input type="radio" name="answer" value="<%=option3 %>"> <%=option3 %> (leaves)</input><br>
+                  <input type="radio" name="answer" value="<%=option4 %>"> <%=option4 %> (leaves)</input><br>
+                  Elapsed time: <input type="text" id="seconds" name="duration" value="00"> <br>
+                  <div class="submit">
+                    <button class="btn btn-lg btn-primary" onclick="stop()">Submit</button>
+                  </div>
+                </form>
+              </div>
+                <!--<div style="text-align:center">-->
+                <!--  <button class="btn btn-lg btn-primary" id="pause">Pause</button>-->
+                <!--</div>-->
+            </td>
+            <td class="smallImage">
+                <p class="CamPosition"> Images from the top camera:</p>
+              <div>
+                <div class="imageCover">
+                  <img class="small" src="https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2Dsmall/<%=folderName%>/top<%=imageName%>1.JPG" style="width:100%;" 
+                  onmouseover='onHover("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/<%=folderName%>/top<%=imageName%>1.JPG");' onmouseout="offHover();" 
+                  onClick='imageClick("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/<%=folderName%>/top<%=imageName%>1.JPG");'><br>
+                  0&deg
+                </div>
+                <div class="imageCover">
+                  <img class="small" src="https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2Dsmall/<%=folderName%>/top<%=imageName%>2.JPG" style="width:100%;" 
+                  onmouseover='onHover("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/<%=folderName%>/top<%=imageName%>2.JPG");' onmouseout="offHover();" 
+                  onClick='imageClick("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/<%=folderName%>/top<%=imageName%>2.JPG");'><br>
+                  40&deg
+                </div>
+                <div class="imageCover">
+                  <img class="small" src="https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2Dsmall/<%=folderName%>/top<%=imageName%>3.JPG" style="width:100%;" 
+                  onmouseover='onHover("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/<%=folderName%>/top<%=imageName%>3.JPG");' onmouseout="offHover();" 
+                  onClick='imageClick("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/<%=folderName%>/top<%=imageName%>3.JPG");'><br>
+                  80&deg
+                </div>
+                <div class="imageCover">
+                  <img class="small" src="https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2Dsmall/<%=folderName%>/top<%=imageName%>4.JPG" style="width:100%;" 
+                  onmouseover='onHover("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/<%=folderName%>/top<%=imageName%>4.JPG");' onmouseout="offHover();" 
+                  onClick='imageClick("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/<%=folderName%>/top<%=imageName%>4.JPG");'><br>
+                  120&deg
+                </div>
+                <div class="imageCover">
+                  <img class="small" src="https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2Dsmall/<%=folderName%>/top<%=imageName%>5.JPG" style="width:100%;" 
+                  onmouseover='onHover("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/<%=folderName%>/top<%=imageName%>5.JPG");' onmouseout="offHover();" 
+                  onClick='imageClick("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/<%=folderName%>/top<%=imageName%>5.JPG");'><br>
+                 160&deg 
+                </div>  
+                <div class="imageCover">
+                  <img class="small" src="https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2Dsmall/<%=folderName%>/top<%=imageName%>6.JPG" style="width:100%;" 
+                  onmouseover='onHover("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/<%=folderName%>/top<%=imageName%>6.JPG");' onmouseout="offHover();" 
+                  onClick='imageClick("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/<%=folderName%>/top<%=imageName%>6.JPG");'><br>
+                  200&deg
+                </div>  
+                <div class="imageCover">
+                  <img class="small" src="https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2Dsmall/<%=folderName%>/top<%=imageName%>7.JPG" style="width:100%;" 
+                  onmouseover='onHover("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/<%=folderName%>/top<%=imageName%>7.JPG");' onmouseout="offHover();" 
+                  onClick='imageClick("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/<%=folderName%>/top<%=imageName%>7.JPG");'><br>
+                  240&deg
+                </div>  
+                <div class="imageCover">
+                  <img class="small" src="https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2Dsmall/<%=folderName%>/top<%=imageName%>8.JPG" style="width:100%;" 
+                  onmouseover='onHover("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/<%=folderName%>/top<%=imageName%>8.JPG");' onmouseout="offHover();" 
+                  onClick='imageClick("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/<%=folderName%>/top<%=imageName%>8.JPG");'><br>
+                  280&deg 
+                </div>
+                <div class="imageCover">
+                  <img class="small" src="https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2Dsmall/<%=folderName%>/top<%=imageName%>9.JPG" style="width:100%;" 
+                  onmouseover='onHover("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/<%=folderName%>/top<%=imageName%>9.JPG");' onmouseout="offHover();" 
+                  onClick='imageClick("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/<%=folderName%>/top<%=imageName%>9.JPG");'><br>
+                  320&deg
+                </div>
+               </div> 
+            </td>
+            <td rowspan="2" width="100%" height="">
+              <div class="controlZoom"> 
+                  <button id="zoomIn" class="btn btn-primary">Zoom In</button>
+                  <button id="zoomOut" class="btn btn-primary">Zoom Out</button>
+              </div>
+              <input type="range" id="zoomRange">
+              <div>
+                <image id="zoom" src="https://s3.us-west-1.amazonaws.com/plantexperiments/Stuffs/crossed_lines.png">
+              </div>
+            </td>
+          </tr>
+          <tr>
+             <td class="smallImage">
+                 <p class="CamPosition"> Images from the side camera:</p>
+                <div>
+                <div class="imageCover">
+                  <img class="small" src="https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2Dsmall/<%=folderName%>/bot<%=imageName%>1.JPG" 
+                  onmouseover='onHover("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/<%=folderName%>/bot<%=imageName%>1.JPG");' onmouseout="offHover();" 
+                  onClick='imageClick("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/<%=folderName%>/bot<%=imageName%>1.JPG");'><br>
+                  0&deg
+                </div>
+                <div class="imageCover">
+                  <img class="small" src="https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2Dsmall/<%=folderName%>/bot<%=imageName%>2.JPG" 
+                  onmouseover='onHover("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/<%=folderName%>/bot<%=imageName%>2.JPG");' onmouseout="offHover();" 
+                  onClick='imageClick("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/<%=folderName%>/bot<%=imageName%>2.JPG");'><br>
+                  40&deg
+                </div>
+                <div class="imageCover">
+                  <img class="small" src="https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2Dsmall/<%=folderName%>/bot<%=imageName%>3.JPG" 
+                  onmouseover='onHover("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/<%=folderName%>/bot<%=imageName%>3.JPG");' onmouseout="offHover();" 
+                  onClick='imageClick("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/<%=folderName%>/bot<%=imageName%>3.JPG");'><br>
+                  80&deg
+                </div>
+                <div class="imageCover">
+                  <img class="small" src="https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2Dsmall/<%=folderName%>/bot<%=imageName%>4.JPG" 
+                  onmouseover='onHover("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/<%=folderName%>/bot<%=imageName%>4.JPG");' onmouseout="offHover();" 
+                  onClick='imageClick("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/<%=folderName%>/bot<%=imageName%>4.JPG");'><br>
+                  120&deg
+                </div>
+                <div class="imageCover">
+                  <img class="small" src="https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2Dsmall/<%=folderName%>/bot<%=imageName%>5.JPG" 
+                  onmouseover='onHover("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/<%=folderName%>/bot<%=imageName%>5.JPG");' onmouseout="offHover();" 
+                  onClick='imageClick("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/<%=folderName%>/bot<%=imageName%>5.JPG");'><br>
+                  160&deg
+                </div>  
+                <div class="imageCover">
+                  <img class="small" src="https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2Dsmall/<%=folderName%>/bot<%=imageName%>6.JPG" 
+                  onmouseover='onHover("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/<%=folderName%>/bot<%=imageName%>6.JPG");' onmouseout="offHover();" 
+                  onClick='imageClick("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/<%=folderName%>/bot<%=imageName%>6.JPG");'><br>
+                  200&deg
+                </div>  
+                <div class="imageCover">
+                  <img class="small" src="https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2Dsmall/<%=folderName%>/bot<%=imageName%>7.JPG" 
+                  onmouseover='onHover("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/<%=folderName%>/bot<%=imageName%>7.JPG");' onmouseout="offHover();" 
+                  onClick='imageClick("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/<%=folderName%>/bot<%=imageName%>7.JPG");'><br>
+                  240&deg
+                </div>  
+                <div class="imageCover">
+                  <img class="small" src="https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2Dsmall/<%=folderName%>/bot<%=imageName%>8.JPG" 
+                  onmouseover='onHover("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/<%=folderName%>/bot<%=imageName%>8.JPG");' onmouseout="offHover();" 
+                  onClick='imageClick("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/<%=folderName%>/bot<%=imageName%>8.JPG");'><br>
+                  280&deg
+                </div>
+                <div class="imageCover">
+                  <img class="small" src="https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2Dsmall/<%=folderName%>/bot<%=imageName%>9.JPG" 
+                  onmouseover='onHover("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/<%=folderName%>/bot<%=imageName%>9.JPG");' onmouseout="offHover();" 
+                  onClick='imageClick("https://s3.us-west-1.amazonaws.com/plantexperiments/plants/2D/<%=folderName%>/bot<%=imageName%>9.JPG");'><br>
+                  320&deg
+                </div>
+                </div>  
+             </td>
+          </tr>
+        </table>
+        <p class="footer">Graphic Labs</p>      
+    </div>
+    <script>
+      $('.small').click(function(){
+         $('.selected').removeClass('selected'); // removes the previous selected class
+         $(this).addClass('selected'); // adds the class to the clicked image
+      });
+    </script>
+    <script>
+      var html = document.getElementsByTagName('html')[0];
+      $(window).bind("load", function() {
+         var elem = document.getElementById("myBar");
+         var width = 10;
+         var id=setInterval(function(){
+          if (width >= 100) {
+            clearInterval(id);
+          } else {
+            width++; 
+            elem.style.width = width + '%'; 
+            elem.innerHTML = width  + '%';
+            if(width==100){
+                $('.preloader').fadeOut(0);
+                var timer = setInterval(function () {
+                  document.getElementById("seconds").value = pad(++sec);
+                }, 1000);
+            }
+          }
+         }, 10);
+      });
+    </script>
+    <script>
+        (function() {
+          $('#zoom').panzoom({
+            $zoomIn: $("#zoomIn"),
+            $zoomOut: $("#zoomOut"),
+            $zoomRange: $("#zoomRange"),
+            startTransform: 'scale(0.9)',
+            increment: 0.1,
+            minScale: 1,
+            contain: 'invert'
+          }).panzoom('zoom');
+        })();
+    </script>
+  </body>
+</html>
+<% } %>
+
+<% } %>
